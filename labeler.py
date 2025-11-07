@@ -6,7 +6,7 @@ from consts import thresholds, feature_names
 
 #Labels data based off given instructions 
 
-f = open('out.txt','+w')
+f = open('logger.txt','+w') #debug log. 
 
 
 class Labeler: 
@@ -39,6 +39,7 @@ class Labeler:
             fiber = getattr(row, "Dietary_Fiber", 0)
             cholesterol = getattr(row, "Cholesterol", 0)
             sodium = getattr(row, "Sodium", 0)
+
             density = getattr(row, "Nutrition_Density", 0)
 
             vals = [getattr(row,f'food'), calories,fat,sat_fat, mon_fat,poly_fat,carbs,sugars,protein,fiber,cholesterol,sodium,water,density]
@@ -100,24 +101,13 @@ def main():
     
     df = pd.read_csv(os.path.join(path,filename))
 
-
-    print(df.head())
-
-
-    print("Columns:")
-    print(df.columns)
-    print("Rows:")
-    print(df.index)
-
     #The labeler needs to be able to determine whether a given food is healthy or not. We will then use this data to train a binary classifier on supervised learning like knn, and use that to predict the user's eating habits. 
 
     L = Labeler(thresholds)
     df = L.label(df)
-
-    print(df.head())
-    print(df.columns)
-    df.to_csv("full_dataframe_output.csv", index=False)
-    print("✅ Full DataFrame saved to full_dataframe_output.csv")
+    print("Labeler has logged status in logger.txt.")
+    df.to_csv("df.csv", index=False)
+    print("Full DataFrame saved to df.csv")
 
 
 main()
