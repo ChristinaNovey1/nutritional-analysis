@@ -72,11 +72,11 @@ class Labeler:
             f.write(f"V:{v}, Val:{val} for {values[0]}\n")
             if op == '<': 
                 if (v < val): 
-                    f.write('+1\n')
+                    f.write(f'+{thresh[2]}\n')
                     score += thresh[2]
             elif op == '>':
                 if (v > val): 
-                    f.write('+1\n')
+                    f.write(f'+{thresh[2]}\n')
                     score += thresh[2]
 
             i+=1
@@ -84,7 +84,8 @@ class Labeler:
         
         f.write(f"Score for: {values[0]}: {score}\n")
         print()
-        return score >= 17
+        cutoff = 15
+        return score >= 15#??? here need to set cutoff
             
             
  
