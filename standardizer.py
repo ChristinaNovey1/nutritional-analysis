@@ -7,6 +7,8 @@ def standardize(df) -> pd.DataFrame:
     Standardizes the given DataFrame by dividing each nutrition value
     by the number of calories, to calculate the density of each value.
     This will be used to measure whether a food item is healthy or not.
+
+    Returns: Pandas DataFrame
     """
 
     # Features of the new standardized dataframe
