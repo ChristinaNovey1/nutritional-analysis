@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd 
 import sys 
 import os 
-from consts import thresholds, feature_names
+from consts import thresholds
+from standardizer import Standardizer
 
 #Labels data based off given instructions 
 
@@ -18,50 +19,63 @@ class Labeler:
     def label(self, frame: pd.DataFrame) -> pd.DataFrame:
 
 
+        f.write(f"\nStarting new frame log.\n")
 
         labels = []
+        scores = []
 
-        cols = frame.columns.str.replace(' ', '_')
-        frame.columns = cols
 
 
         for row in frame.itertuples(index=False):
 
             #pull features using getattr
-            calories = getattr(row, "Caloric_Value", 0)
-            fat = getattr(row, "Fat", 0)
-            sat_fat = getattr(row, "Saturated_Fats", 0)
-            mon_fat = getattr(row, "Monounsaturated_Fats", 0)
-            poly_fat = getattr(row, "Polyunsaturated_Fats", 0)
-            carbs = getattr(row, "Carbohydrates", 0)
-            sugars = getattr(row, "Sugars", 0)
-            protein = getattr(row, "Protein", 0)
-            fiber = getattr(row, "Dietary_Fiber", 0)
-            cholesterol = getattr(row, "Cholesterol", 0)
-            sodium = getattr(row, "Sodium", 0)
+            fat = getattr(row, "Fat_Density", 0)
+            sat_fat = getattr(row, "Saturated_Fats_Density", 0)
+            mon_fat = getattr(row, "Monounsaturated_Fats_Density", 0)
+            poly_fat = getattr(row, "Polyunsaturated_Fats_Density", 0)
+            carbs = getattr(row, "Carbohydrates_Density", 0)
+            sugars = getattr(row, "Sugars_Density", 0)
+            protein = getattr(row, "Protein_Density", 0)
+            fiber = getattr(row, "Dietary_Fiber_Density", 0)
+            cholesterol = getattr(row, "Cholesterol_Density", 0)
+            sodium = getattr(row, "Sodium_Density", 0)
 
 
 
-            vals = [getattr(row,f'food'), calories,fat,sat_fat, mon_fat,poly_fat,carbs,sugars,protein,fiber,cholesterol,sodium]
+            vals = [getattr(row,f'food'), fat,sat_fat, mon_fat,poly_fat,carbs,sugars,protein,fiber,cholesterol,sodium]
 
             
-         
-            if (self.test(vals)):
-                f.write(f"{getattr(row,'food')} is healthy.\n")
+            res, score = self.test(vals)
+            if (res):
+                f.write(f"{getattr(row,'food')} is healthy.\n\n")
                 labels.append("Healthy")
+                
             else:
-                f.write(f"{getattr(row,'food')} is unhealthy.\n")
+                f.write(f"{getattr(row,'food')} is unhealthy.\n\n")
                 labels.append("Unhealthy")
-
+            scores.append(score)
         # Add as new column
         frame['Health_Label'] = labels
-        print(f"✅ Added Health_Label column ({len(labels)} entries)")
+        print(f"Added Health_Label column ({len(labels)} entries)")
+        frame['Health_Score'] = scores
+        print(f"Added Health_Score column ({len(scores)}) entries")
         return frame
 
-    def test(self, values) ->  bool  :
+    def test(self, values) ->  {bool,int}  :
         i =1
         score = 0
-        test_order = ["Caloric_Value", "Fat", "Saturated_Fats", "Monounsaturated_Fats", "Polyunsaturated_Fats", "Carbohydrates", "Sugars", "Protein", "Dietary_Fiber", "Cholesterol", "Sodium"]
+        test_order = [
+            "Fat_Density",
+            "Saturated_Fats_Density",
+            "Monounsaturated_Fats_Density",
+            "Polyunsaturated_Fats_Density",
+            "Carbohydrates_Density",
+            "Sugars_Density",
+            "Protein_Density",
+            "Dietary_Fiber_Density",
+            "Cholesterol_Density",
+            "Sodium_Density"
+        ]
         for test in test_order: 
             v = values[i]
             thresh = self.criteria[test]
@@ -69,7 +83,7 @@ class Labeler:
             val = thresh[1]
 
 
-            f.write(f"V:{v}, Val:{val} for {values[0]}\n")
+            f.write(f"Testing: {test} V:{v}, Val:{val} for {values[0]}\n")
             if op == '<': 
                 if (v < val): 
                     f.write(f'+{thresh[2]}\n')
@@ -85,7 +99,8 @@ class Labeler:
         f.write(f"Score for: {values[0]}: {score}\n")
         print()
         cutoff = 15
-        return score >= 15#??? here need to set cutoff
+        res = score >= 15#??? here need to set cutoff
+        return res,score
             
             
  
@@ -94,21 +109,39 @@ class Labeler:
 
 #lil demo main for the selections (final project -> [Files[datasets], labeler.py])
 def main(): 
-    path = os.path.join(os.getcwd(), "Files")
-    
-    p = input("Specify file.csv\n")  
 
-    filename = f"FOOD-DATA-GROUP{p}.csv"
-    
-    df = pd.read_csv(os.path.join(path,filename))
+
+    df1 = pd.read_csv('Files/FOOD-DATA-GROUP1.csv')
+    df2 = pd.read_csv('Files/FOOD-DATA-GROUP2.csv')
+    df3 = pd.read_csv('Files/FOOD-DATA-GROUP3.csv')
+    df4 = pd.read_csv('Files/FOOD-DATA-GROUP4.csv')
+    df5 = pd.read_csv('Files/FOOD-DATA-GROUP5.csv')
+
 
     #The labeler needs to be able to determine whether a given food is healthy or not. We will then use this data to train a binary classifier on supervised learning like knn, and use that to predict the user's eating habits. 
 
+    STD = Standardizer()
+    df1 = STD.standardize(df1, 'standardized_data1.csv')
+    df2 = STD.standardize(df2, 'standardized_data2.csv')
+    df3 = STD.standardize(df3, 'standardized_data3.csv')
+    df4 = STD.standardize(df4, 'standardized_data4.csv')
+    df5 = STD.standardize(df5, 'standardized_data5.csv')
+
     L = Labeler(thresholds)
-    df = L.label(df)
+    df1 = L.label(df1)
+    df2 = L.label(df2)
+    df3 = L.label(df3)
+    df4 = L.label(df4)
+    df5 = L.label(df5)
+
+
     print("Labeler has logged status in logger.txt.")
-    df.to_csv("df.csv", index=False)
-    print("Full DataFrame saved to df.csv")
+    df1.to_csv("df1.csv", index=False)
+    df2.to_csv("df2.csv", index = False)
+    df3.to_csv("df3.csv", index = False)
+    df4.to_csv("df4.csv", index = False)
+    df5.to_csv("df5.csv", index = False)
+
 
 
 main()
