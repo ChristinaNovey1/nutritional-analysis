@@ -14,7 +14,11 @@ class Standardizer():
 
         nutrient_cols = df.columns.drop(['food', 'Caloric Value'])
         df_density = df[nutrient_cols].div(calories, axis=0)
-        df_density = df_density.add_suffix(" Density")
+
+        df_density.columns = [
+            col if col.endswith("Density") else col + " Density"
+            for col in df_density.columns
+        ]
 
 
         result = pd.concat([df[['food', 'Caloric Value']], df_density], axis=1)
