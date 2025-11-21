@@ -143,11 +143,14 @@ def main():
 
 
     print("Labeler has logged status in logger.txt.")
-    df1.to_csv("df1.csv", index=False)
-    df2.to_csv("df2.csv", index = False)
-    df3.to_csv("df3.csv", index = False)
-    df4.to_csv("df4.csv", index = False)
-    df5.to_csv("df5.csv", index = False)
+
+    os.makedirs("Labeled_Files", exist_ok=True)
+
+    df1.to_csv("Labeled_Files/df1.csv", index=False)
+    df2.to_csv("Labeled_Files/df2.csv", index=False)
+    df3.to_csv("Labeled_Files/df3.csv", index=False)
+    df4.to_csv("Labeled_Files/df4.csv", index=False)
+    df5.to_csv("Labeled_Files/df5.csv", index=False)
 
 
 
