@@ -3,6 +3,7 @@ import os
 from consts import thresholds
 from standardizer import Standardizer
 from labeler import Labeler
+from preprocessor import Preprocessor
 
 def main():
     # Read every food nutrition csv and put into a dataframe
@@ -38,5 +39,15 @@ def main():
     df3.to_csv("Labeled_Files/df3.csv", index=False)
     df4.to_csv("Labeled_Files/df4.csv", index=False)
     df5.to_csv("Labeled_Files/df5.csv", index=False)
+
+    # Read in lifestyle data into df
+    data = pd.read_csv("Files/meal_metadata.csv")
+
+    # Create preprocessor to process the data
+    columns = ["Daily meals frequency", "Carbs", "Proteins", "Fats", "Calories", "meal_name",
+               "diet_type", "sugar_g", "sodium_g", "cholesterol_g", "serving_size_g",
+               "cooking_method", "rating"]
+    preprocessor = Preprocessor(data, columns)
+    preprocessor.preprocess()
 
 main()
