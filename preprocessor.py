@@ -14,9 +14,6 @@ class Preprocessor:
         self.data.loc[:, "sodium_g"] = self.data["sodium_mg"].div(1000, axis=0)
         self.data.loc[:, "cholesterol_g"] = self.data["cholesterol_mg"].div(1000, axis=0)
 
-        # Creating empty df for features
-        features = pd.DataFrame()
-
         # Grabbing the columns we need
         columns_needed = self.data[self.columns]
 
@@ -37,8 +34,13 @@ class Preprocessor:
         one_hot_encoded = pd.DataFrame(one_hot_encoded, columns=one_hot_encoder.get_feature_names_out(categorical_columns))
 
         # Combine numerical features and standardize
+        features = pd.DataFrame()
         features = pd.concat([features, nutrition_per_meal, nutrition_per_serving], axis=1)
         scaler = StandardScaler()
         standardized_features = pd.DataFrame(scaler.fit_transform(features), columns=features.columns)
-        print(features.to_string())
-        print(standardized_features.to_string())
+
+        # Combine standardized features with one hot encoded features
+        final_features = pd.DataFrame()
+        final_features = pd.concat([final_features, standardized_features, one_hot_encoded], axis=1)
+
+        return final_features

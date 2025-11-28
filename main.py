@@ -48,6 +48,6 @@ def main():
                "diet_type", "sugar_g", "sodium_g", "cholesterol_g", "serving_size_g",
                "cooking_method", "rating"]
     preprocessor = Preprocessor(data, columns)
-    preprocessor.preprocess()
+    features = preprocessor.preprocess()
 
 main()
