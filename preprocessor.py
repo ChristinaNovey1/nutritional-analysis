@@ -83,3 +83,10 @@ class Preprocessor:
         target = pd.Series(target)
 
         return target
+
+    def get_meal_names(self) -> pd.Series:
+        """
+        Returns the name of each meal, used as an ID for each observation
+        :return: Series that contains each meal name
+        """
+        return self.data["meal_name"]

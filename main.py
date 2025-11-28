@@ -50,5 +50,6 @@ def main():
     preprocessor = Preprocessor(data, columns)
     features = preprocessor.preprocess() # features used by model
     target = preprocessor.get_target(2.5) # target used by model
+    meal_names = preprocessor.get_meal_names() # meal names, used as ID for each observation
 
 main()
