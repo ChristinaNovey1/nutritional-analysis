@@ -7,10 +7,9 @@ from tensorflow.keras import layers, models, optimizers
 
 class NN: 
     def __init__(self, features, target): 
-        self.features = features; 
-        self.target = target
+        pass
 
-    def train(self): 
+    def train(self,features,target): 
         
         model = keras.Sequential(
             [ 
@@ -32,5 +31,8 @@ class NN:
 
 
         return model
+    
+
+    def predict(self, xtest): 
 
 
