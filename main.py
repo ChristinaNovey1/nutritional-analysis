@@ -48,6 +48,7 @@ def main():
                "diet_type", "sugar_g", "sodium_g", "cholesterol_g", "serving_size_g",
                "cooking_method", "rating"]
     preprocessor = Preprocessor(data, columns)
-    features = preprocessor.preprocess()
+    features = preprocessor.preprocess() # features used by model
+    target = preprocessor.get_target(2.5) # target used by model
 
 main()

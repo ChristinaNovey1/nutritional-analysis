@@ -4,12 +4,25 @@ from sklearn.preprocessing import StandardScaler
 
 # Preprocessor class, will be used to preprocess the data for models
 class Preprocessor:
-    # Constructor, initializes the data attribute with the dataset that we're preprocessing
     def __init__(self, data : pd.DataFrame, columns : list):
+        """
+        Constructor, initializes the data attribute with the dataset we're preprocessing
+        and the columns to grab from the dataset.
+        :param data: DataFrame containing the data
+        :param columns: List containing the column names to grab from dataset
+        """
         self.data = data
         self.columns = columns
 
-    def preprocess(self):
+    def preprocess(self) -> pd.DataFrame:
+        """
+        Preprocesses the data from the data attribute by:
+        - Converting any numerical data in mg to g
+        - Using one-hot encoding to store the categorical data
+        - Scaling the numerical data with StandardScaler
+        :return: features dataframe
+        """
+
         # Converting columns in mg to g
         self.data.loc[:, "sodium_g"] = self.data["sodium_mg"].div(1000, axis=0)
         self.data.loc[:, "cholesterol_g"] = self.data["cholesterol_mg"].div(1000, axis=0)
@@ -44,3 +57,29 @@ class Preprocessor:
         final_features = pd.concat([final_features, standardized_features, one_hot_encoded], axis=1)
 
         return final_features
+
+    def get_target(self, threshold : float) -> pd.Series:
+        """
+        Creates the target values using the ratings column, healthy/unhealthy based on whether
+        the rating meets the threshold
+        :param threshold: The threshold of healthy/unhealthy
+        :return: Series containing the target values
+        """
+
+        # Grab ratings column
+        ratings = self.data["rating"]
+        target = [] # target data
+
+        # For each rating
+        for rating in ratings:
+            # If it meets the threshold, label it healthy
+            if rating > threshold:
+                target.append("Healthy")
+            # If it doesn't meet the threshold, label it unhealthy
+            else:
+                target.append("Unhealthy")
+
+        # Convert to Series
+        target = pd.Series(target)
+
+        return target
