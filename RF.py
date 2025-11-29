@@ -3,7 +3,7 @@ import os
 import numpy as np 
 import pandas as pd 
 from sklearn.ensemble import RandomForestClassifier
-
+from sklearn.metrics import accuracy_score
 class RandomForest: 
     def __init__(self): 
         self.model = RandomForestClassifier(n_estimators=60, max_depth=None, random_state=42) #Maybe we need tro switch the n estimators here. 
@@ -12,8 +12,10 @@ class RandomForest:
         self.model.fit(xtrain, ytrain)
     
     def predict(self, xtest): 
-        return self.model.predict(xtest)
+        predictions = self.model.predict(xtest)
+        return predictions 
     
-    def accuracy(self, xtest, ytest): 
-        return self.model.score(xtest, ytest)
+    def accuracy(self, predictions, ytest): 
+        accuracy = accuracy_score(ytest, predictions)
+        return accuracy
     

@@ -3,6 +3,7 @@ import os
 import pandas as pd 
 import numpy as np 
 from sklearn.neighbors import KNeighborsClassifier 
+from sklearn.metrics import accuracy_score
 
 class KNN: 
     def __init__(self, k): 
@@ -15,10 +16,12 @@ class KNN:
 
 
     def predict(self, xtest): 
-        return self.model.predict(xtest) 
-
-    def accuracy(self, xtest, ytest): 
-        return self.model.score(xtest, ytest)
+        predictions = self.model.predict(xtest) 
+        return predictions
+    
+    def accuracy(self, predictions, ytest): 
+        accuracy = accuracy_score(ytest, predictions)
+        return accuracy
     
 
 
