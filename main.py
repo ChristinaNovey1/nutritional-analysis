@@ -68,17 +68,39 @@ def main():
     Model3.train(xtrain, ytrain)
 
     print("Training models:")
-    print("\n=== Neural Network Accuracy ===")
+
+    # Neural network metrics
     predictionsNN = Model1.predict(xtest)
-    print(Model1.accuracy(ytest, predictionsNN))
+    accuracy_NN, f1_NN, precision_NN, recall_NN = Model1.performance_metrics(ytest, predictionsNN)
+    print("\n=== Neural Network===")
+    print(f"Accuracy: {accuracy_NN}")
+    print(f"F1 score: {f1_NN}")
+    print(f"Precision: {precision_NN}")
+    print(f"Recall: {recall_NN}")
+    Model1.confusion_matrix(ytest, predictionsNN)
+    Model1.roc_curve(xtest, ytest)
 
-    print("\n=== KNN Accuracy ===")
+    # k-NN metrics
     predictionsKNN = Model2.predict(xtest)
-    print(Model2.accuracy(ytest, predictionsKNN))
+    accuracy_KNN, f1_KNN, precision_KNN, recall_KNN = Model2.performance_metrics(ytest, predictionsKNN)
+    print("\n=== k-NN ===")
+    print(f"Accuracy: {accuracy_KNN}")
+    print(f"F1 score: {f1_KNN}")
+    print(f"Precision: {precision_KNN}")
+    print(f"Recall: {recall_KNN}")
+    Model2.confusion_matrix(ytest, predictionsKNN)
+    Model2.roc_curve(xtest, ytest)
 
-    print("\n=== Random Forest Accuracy ===")
+    # Random forest metrics
     predictionsRF = Model3.predict(xtest)
-    print(Model3.accuracy(ytest, predictionsRF))
+    accuracy_RF, f1_RF, precision_RF, recall_RF = Model3.performance_metrics(ytest, predictionsRF)
+    print("\n=== Random Forest===")
+    print(f"Accuracy: {accuracy_RF}")
+    print(f"F1 score: {f1_RF}")
+    print(f"Precision: {precision_RF}")
+    print(f"Recall: {recall_RF}")
+    Model3.confusion_matrix(ytest, predictionsRF)
+    Model3.roc_curve(xtest, ytest)
 
 
 main()
