@@ -1,4 +1,4 @@
-#CONST PROC DO NOT EDIT 
+# Thresholds used by labeler to determine healthy/unhealthy
 thresholds = {
     # Nutrition value               # (operation, threshold value, points, penalty)
     "Fat_Density":                  ("<", 0.02, 2, 7),
@@ -23,7 +23,7 @@ thresholds = {
     "Total_Vitamin_Density":        (">", 0.30, 4, 6),
 }
 
-
+# Features of the dataset we used
 FEATURE_NAMES = [
     "Fat_Density",
     "Saturated_Fats_Density",

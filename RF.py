@@ -3,6 +3,7 @@ from sklearn.metrics import (accuracy_score, f1_score, precision_score, recall_s
                              confusion_matrix, ConfusionMatrixDisplay, RocCurveDisplay)
 import matplotlib.pyplot as plt
 
+# Creates random forest model
 class RF: 
     def __init__(self):
         """Constructor to initialize the model."""
@@ -11,9 +12,9 @@ class RF:
     def train(self, xtrain, ytrain):
         """
         Trains the model
-        :param features: The feature data that the model will be trained on.
-        :param target_train: The target data that the model will be trained on.
-        :return: The trainined model
+        :param xtrain: The feature data that the model will be trained on.
+        :param ytrain: The target data that the model will be trained on.
+        :return: The trained model
         """
         self.model.fit(xtrain, ytrain)
     
@@ -47,8 +48,12 @@ class RF:
         :param predictions: The predictions created by the model.
         :return: None
         """
+
+        # Creates confusion matrix to print to terminal
         cm = confusion_matrix(ytest, predictions, labels=["Unhealthy", "Healthy"])
         print(f"Confusion Matrix:\n {cm}")
+
+        # Creates pretty confusion matrix with matplotlib
         cm_disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Unhealthy", "Healthy"])
         cm_disp.plot()
         plt.title("Random Forest")
@@ -72,6 +77,7 @@ class RF:
         plt.title("Random Forest")
         plt.show()
 
-    def blank_cpy(self): 
+    def blank_cpy(self):
+        """Blank copy of object from class."""
         return RF()
     

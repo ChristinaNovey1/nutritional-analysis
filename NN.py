@@ -14,7 +14,7 @@ class NN:
         Trains the model
         :param features: The feature data that the model will be trained on.
         :param target_train: The target data that the model will be trained on.
-        :return: The trainined model
+        :return: The trained model
         """
         self.model.fit(features, target_train)
         return self.model 
@@ -50,8 +50,12 @@ class NN:
         :param predictions: The predictions created by the model.
         :return: None
         """
+
+        # Creates confusion matrix to print to terminal
         cm = confusion_matrix(ytest, predictions, labels=["Unhealthy", "Healthy"])
         print(f"Confusion Matrix:\n {cm}")
+
+        # Creates pretty confusion matrix with matplotlib
         cm_disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Unhealthy", "Healthy"])
         cm_disp.plot()
         plt.title("Neural Network")
@@ -69,10 +73,12 @@ class NN:
         y_probabilities = self.model.predict_proba(xtest)
         y_probabilities = y_probabilities[:, 0]
 
+        # Create ROC curve with matplotlib
         RocCurveDisplay.from_predictions(ytest, y_probabilities, pos_label="Healthy")
         plt.plot([0, 1], [0, 1], linestyle='--')
         plt.title("Neural Network")
         plt.show()
 
-    def blank_cpy(self): 
+    def blank_cpy(self):
+        """Blank copy of object from class."""
         return NN()

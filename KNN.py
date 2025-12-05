@@ -15,8 +15,8 @@ class KNN:
         """
         Trains the model
         :param features: The feature data that the model will be trained on.
-        :param target_train: The target data that the model will be trained on.
-        :return: The trainined model
+        :param ftargets: The target data that the model will be trained on.
+        :return: The trained model
         """
         self.model.fit(features,ftargets)
 
@@ -51,8 +51,12 @@ class KNN:
         :param predictions: The predictions created by the model.
         :return: None
         """
+
+        # Creates confusion matrix to print to terminal
         cm = confusion_matrix(ytest, predictions, labels=["Unhealthy", "Healthy"])
         print(f"Confusion Matrix:\n {cm}")
+
+        # Creates pretty confusion matrix with matplotlib
         cm_disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Unhealthy", "Healthy"])
         cm_disp.plot()
         plt.title("k-NN")
@@ -70,12 +74,14 @@ class KNN:
         y_probabilities = self.model.predict_proba(xtest)
         y_probabilities = y_probabilities[:, 0]
 
+        # Create ROC curve with matplotlib
         RocCurveDisplay.from_predictions(ytest, y_probabilities, pos_label="Healthy")
         plt.plot([0, 1], [0, 1], linestyle='--')
         plt.title("k-NN")
         plt.show()
 
-    def blank_cpy(self): 
+    def blank_cpy(self):
+        """Returns a blank object of the class."""
         return KNN(self.k)
     
 

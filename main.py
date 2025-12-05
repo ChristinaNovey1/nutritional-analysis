@@ -1,4 +1,3 @@
-# main.py
 import pandas as pd
 import numpy as np 
 from consts import thresholds,FEATURE_NAMES
@@ -11,7 +10,6 @@ from sklearn.utils import resample
 from NN import NN
 from RF import RF
 from KNN import KNN
-
 
 def KFoldCV(name_of_model, m, features, target, k):
     """K-Fold Cross Validation for each model. """
@@ -182,16 +180,14 @@ def main():
     Model3.roc_curve(xtest, ytest)
 
 
-    #Use KFold Method Above. 
+    # Use KFold Method Above
     print("Cross Validation: ")
 
     KFoldCV("Neural Network", Model1, features, target, 10)
     KFoldCV("K-Nearest Neighbors", Model2, features, target, 10)
     KFoldCV("Random Forest", Model3, features, target, 10)  
 
-    #Bootstrap Eval     
-
-
+    #Bootstrap Eval
     bootstrapEval("Neural Network", Model1, features, target, 200)    
     bootstrapEval("K-Nearest Neighbors", Model2, features, target, 200)
     bootstrapEval("Random Forest", Model3, features, target, 200)
